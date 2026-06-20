@@ -1,0 +1,68 @@
+let total = 0;
+let completed = 0;
+
+function addHabit(){
+
+    const input = document.getElementById("habitInput");
+    const habit = input.value.trim();
+
+    if(habit === ""){
+        alert("Enter a habit");
+        return;
+    }
+
+    total++;
+
+    const li = document.createElement("li");
+
+    const text = document.createElement("span");
+    text.innerText = habit;
+
+    const doneBtn = document.createElement("button");
+    doneBtn.innerText = "Done";
+
+    doneBtn.onclick = function(){
+
+        if(!text.classList.contains("completed")){
+            text.classList.add("completed");
+            completed++;
+            updateProgress();
+        }
+    }
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.innerText = "Delete";
+
+    deleteBtn.onclick = function(){
+
+        if(text.classList.contains("completed")){
+            completed--;
+        }
+
+        total--;
+        li.remove();
+        updateProgress();
+    }
+
+    li.appendChild(text);
+    li.appendChild(document.createTextNode(" "));
+    li.appendChild(doneBtn);
+    li.appendChild(document.createTextNode(" "));
+    li.appendChild(deleteBtn);
+
+    document.getElementById("habitList").appendChild(li);
+
+    input.value="";
+    updateProgress();
+}
+
+function updateProgress(){
+
+    let percent = 0;
+
+    if(total>0){
+        percent = Math.round((completed/total)*100);
+    }
+
+    document.getElementById("progress").innerHTML="Progress: "+percent+"%";
+}
