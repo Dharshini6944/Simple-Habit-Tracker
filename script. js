@@ -1,65 +1,75 @@
-document.addEventListener("DOMContentLoaded", function () {
+let total = 0;
+let completed = 0;
 
-    let total = 0;
-    let completed = 0;
+document.getElementById("addBtn").addEventListener("click", addHabit);
 
-    document.getElementById("addBtn").addEventListener("click", addHabit);
+function addHabit() {
 
-    function addHabit() {
-        const input = document.getElementById("habitInput");
-        const text = input.value.trim();
+    const input = document.getElementById("habitInput");
+    const text = input.value.trim();
 
-        if(text === ""){
-            alert("Please enter a habit");
-            return;
+    if(text === ""){
+        alert("Please enter a habit");
+        return;
+    }
+
+    total++;
+
+    const li = document.createElement("li");
+
+    const span = document.createElement("span");
+    span.textContent = text;
+
+    const doneBtn = document.createElement("button");
+    doneBtn.textContent = "Done";
+
+    doneBtn.addEventListener("click", function(){
+
+        if(!span.classList.contains("completed")){
+            span.classList.add("completed");
+            completed++;
+            updateProgress();
         }
 
-        total++;
+    });
 
-        const li = document.createElement("li");
-        const span = document.createElement("span");
-        span.textContent = text;
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete";
 
-        const doneBtn = document.createElement("button");
-        doneBtn.textContent = "Done";
+    deleteBtn.addEventListener("click", function(){
 
-        doneBtn.addEventListener("click", function(){
-            if(!span.classList.contains("completed")){
-                span.classList.add("completed");
-                completed++;
-                updateProgress();
-            }
-        });
+        if(span.classList.contains("completed")){
+            completed--;
+        }
 
-        const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "Delete";
-
-        deleteBtn.addEventListener("click", function(){
-            if(span.classList.contains("completed")){
-                completed--;
-            }
-            total--;
-            li.remove();
-            updateProgress();
-        });
-
-        li.appendChild(span);
-        li.appendChild(document.createTextNode(" "));
-        li.appendChild(doneBtn);
-        li.appendChild(document.createTextNode(" "));
-        li.appendChild(deleteBtn);
-
-        document.getElementById("habitList").appendChild(li);
-
-        input.value = "";
+        total--;
+        li.remove();
         updateProgress();
+
+    });
+
+    li.appendChild(span);
+    li.appendChild(document.createTextNode(" "));
+    li.appendChild(doneBtn);
+    li.appendChild(document.createTextNode(" "));
+    li.appendChild(deleteBtn);
+
+    document.getElementById("habitList").appendChild(li);
+
+    input.value = "";
+
+    updateProgress();
+}
+
+function updateProgress(){
+
+    let percent = 0;
+
+    if(total > 0){
+        percent = Math.round((completed / total) * 100);
     }
 
-    function updateProgress(){
-        let percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+    document.getElementById("progress").textContent =
+    "Progress: " + percent + "%";
 
-        document.getElementById("progress").textContent =
-        "Progress: " + percent + "%";
-    }
-
-});
+}
