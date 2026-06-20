@@ -1,3 +1,4 @@
+alert("JavaScript Loaded");
 let total = 0;
 let completed = 0;
 
